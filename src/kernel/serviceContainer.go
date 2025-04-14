@@ -104,5 +104,5 @@ func (container *ServiceContainer) GetConfig() *object.HashMap {
 	// merge config
 	// container.Config = object.ReplaceHashMapRecursive(container.Config, basicConfig, container.DefaultConfig, container.UserConfig)
 	//fmt.Dump(container.Config)
-	return container.Config
+	return &config
 }
