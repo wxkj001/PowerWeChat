@@ -2,7 +2,9 @@ package kernel
 
 import (
 	"crypto/md5"
+
 	"github.com/ArtisanCloud/PowerLibs/v3/object"
+	"github.com/ArtisanCloud/PowerWeChat/v3/src/kernel/mergo"
 	"github.com/ArtisanCloud/PowerWeChat/v3/src/kernel/power"
 )
 
@@ -79,9 +81,28 @@ func (container *ServiceContainer) GetConfig() *object.HashMap {
 
 	// init container config
 	basicConfig := container.getBaseConfig()
+	config := object.HashMap{}
+	basicConfigs := object.HashMap{}
+	DefaultConfig := object.HashMap{}
+	UserConfig := object.HashMap{}
 
+	if container.Config != nil {
+		config = *container.Config
+	}
+	if basicConfig != nil {
+		basicConfigs = *basicConfig
+	}
+	if container.DefaultConfig != nil {
+		DefaultConfig = *container.DefaultConfig
+	}
+	if container.UserConfig != nil {
+		UserConfig = *container.UserConfig
+	}
+	mergo.Map(&config, basicConfigs)
+	mergo.Map(&config, DefaultConfig)
+	mergo.Map(&config, UserConfig)
 	// merge config
-	container.Config = object.ReplaceHashMapRecursive(container.Config, basicConfig, container.DefaultConfig, container.UserConfig)
+	// container.Config = object.ReplaceHashMapRecursive(container.Config, basicConfig, container.DefaultConfig, container.UserConfig)
 	//fmt.Dump(container.Config)
 	return container.Config
 }
